@@ -7,9 +7,9 @@ import joblib
 import xgboost as xgb
 import os
 from config import MODELS, PREPROCESSED_FEATURES, RESULTS, TRAINING_DATASET, ENGINEERED_FEATURES, ENGINEERED_FEATURES, PREPROCESSED_FEATURES
-from source_code.data_engineering import data_engineering
-from source_code.final_preprocess_features import preprocess_features
-from source_code.train import train_pipeline
+from data_engineering import data_engineering
+from final_preprocess_features import preprocess_features
+from train import train_pipeline
 import lime.lime_tabular
 import matplotlib.pyplot as plt
 
@@ -57,7 +57,7 @@ explainer = lime.lime_tabular.LimeTabularExplainer(
         "total_transactions_count",
         "premium_ratio",
         "standard_ratio",
-        "basic_ratio"],  # Replace with actual feature names
+        "basic_ratio"],
     class_names=["No Churn", "Churn"],
     discretize_continuous=True
 )
