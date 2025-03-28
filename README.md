@@ -13,12 +13,41 @@ Repository Structure
 
 
 Steps to use the repository
-1. update the ENV.env file name to .env
+1. update the ENV.txt file name to .env
 2. update the file and folder paths in .env file according to you system
-3. run "dataEngineering.py" file to generate the features
-4. run "preprocessed_features.py" file to generate more relevent features and choose important features.
-5. run "train.py" file to get the traing models and analysis results
-6. run "useModel.py" to load the model and use it for inputs
+3. run main.py file it has entire pipeline for 
+    "data_engineering.py" file to generate the features
+    "final_preprocess_features.py" file to generate more relevent features and choose important features.
+    "train.py" file to get the traing models and analysis results
+
+
+Objective: Build a robust classification model that predicts which customers will churn
+between Jan. 1, 2024 and Feb. 28, 2024, using time-series data with a double index
+(customer_id and date). Demonstrate modeling and feature engineering skills, as well as
+production-aware design practices.
+
+Approach Taken:
+
+Data Engineering: The data engineering pipeline processes customer transaction data by loading and sorting records chronologically. Missing values in transaction amounts are filled with the customer's average, while missing plan types are replaced with the most frequent plan. Various statistical features are generated, including total transactions, average spending, and transaction variability. Time-based features capture transaction trends, inactivity periods, and days since the last transaction. Rolling averages provide short- and long-term spending patterns, while plan-based features track plan switches, upgrades, and downgrades. Customers are also assigned transaction levels based on cumulative spending. The final processed dataset is saved for further analysis and modeling.
+
+Feature Processing and selection: This script performs final feature generation and selection for customer transaction data. It first loads the engineered dataset and computes additional features such as transaction gap (ratio of inactivity to tenure), spending variability (standard deviation vs. mean transaction amount), loyalty score (customer tenure weighted by total spending and plan stability), and transaction trend score (short-term vs. long-term transaction difference). It also flags high churn risk for customers inactive for over two months. After feature engineering, the script retains only the most relevant columns, including transaction behavior, plan details, and churn labels. The processed dataset is then saved for modeling.
+    
+    transaction_gap – Ratio of days since the last transaction to the customer's total tenure, indicating inactivity relative to account age. Measures customer engagement. A higher gap suggests the customer is using the service less frequently, indicating a potential risk of churn.
+
+    spending_variability – Ratio of the standard deviation of transaction amounts to the average transaction amount, measuring spending consistency.  Captures spending habits. High variability may suggest inconsistent usage, which could signal uncertainty in customer commitment.
+
+    loyalty_score – A weighted measure of customer tenure and cumulative spending, adjusted by plan switch count to assess loyalty. Reflects long-term customer commitment. Higher values suggest a more engaged and stable customer, reducing the likelihood of churn.
+
+    high_churn_risk – A binary flag (1 = high risk) indicating if a customer has been inactive for more than two months. Directly flags inactive customers, making it a strong indicator for predicting churn.
+
+    transaction_trend_score – The difference between the 3-month and 6-month rolling average transaction amounts, capturing short-term vs. long-term spending trends. Identifies changes in spending behavior. A declining trend may indicate reduced engagement, which is often a precursor to churn.
+
+Train XGBoost Model: This script builds a machine learning pipeline to predict customer churn using XGBoost. It loads and preprocesses data, handling missing values and encoding categorical features. The data is then split into training and testing sets, followed by feature scaling. The pipeline automates the entire workflow, ensuring efficient training and evaluation of the churn prediction model.
+
+Results: The XGBoost model is trained and evaluated using metrics like accuracy and Matthews Correlation Coefficient (MCC). f1 score, precision, recall are also generated in results json file. The model and preprocessing tools are saved for future use, and LIME explanations are generated to interpret model predictions.
+
+Accuracy: 94.16%
+MCC: 86.45
 
 
 Exercise: Predicting Customer Churn Using Time-Series Data
@@ -66,4 +95,4 @@ Exercise: Predicting Customer Churn Using Time-Series Data
         LIME is technically relevant because it helps interpret complex, black-box machine learning models by providing local explanations.
         It explains individual predictions rather than the entire model and Identifies which features influence a specific prediction.
 
-Conclusion: XGBoost model outperforms according to accuracy and matthews_corrcoef measures. Suggestion is to use XGBoost model for churn prediction.
+Conclusion: I have tried models like logistic regression, Rando forest, decision tree and XGBoost. XGBoost model outperforms according to accuracy and matthews_corrcoef measures. Suggestion is to use XGBoost model for churn prediction.

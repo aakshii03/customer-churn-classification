@@ -1,4 +1,4 @@
-customer_id,transaction_amount,transaction_gap,spending_variability,loyalty_score,high_churn_risk,transaction_trend_score,plan_type,is_downgraded,is_upgraded,total_transactions,premium_ratio,standard_ratio,basic_ratio,churn
+customer_id,transaction_amount,transaction_gap,spending_variability,loyalty_score,high_churn_risk,transaction_trend_score,plan_type,is_plan_downgraded,is_plan_upgraded,total_transactions_count,premium_ratio,standard_ratio,basic_ratio,churn
 CUST_1,193.524658235208,0.13561847988077497,0.5400714147079638,43285.01522527486,0,0.0,Basic,0,0,12,0.25,0.5,0.25,0
 CUST_1,303.342657256548,0.12962962962962962,0.5400714147079638,116266.95182507091,1,0.0,Standard,0,0,12,0.25,0.5,0.25,0
 CUST_1,38.46096996241769,0.12465753424657534,0.5400714147079638,130263.21612718228,1,0.0,Standard,0,0,12,0.25,0.5,0.25,0

@@ -1,20 +1,22 @@
 import pandas as pd
-from config import ENGINEERED_FEATURES, PREPROCESSED_FEATURES
 
-def loadData(file_path):
+
+def load_data(file_path):
     """Load the engineered dataset."""
     return pd.read_csv(file_path)
 
-def featureEngineering(df):
-    """Perform Feature Engineering on the dataset."""
-    df["transaction_gap"] = df["days_since_last_txn"] / df["customer_tenure"]
-    df["spending_variability"] = df["std_transaction"] / df["avg_transaction"]
-    df["loyalty_score"] = df["customer_tenure"] * df["cumulative_transaction"] / (df["plan_switch_count"] + 1)
+
+def feature_engineering(df):
+    """Perform feature engineering on the dataset."""
+    df["transaction_gap"] = df["days_since_last_txn"] / df["customer_tenure_days"]
+    df["spending_variability"] = df["std_transaction_amount"] / df["avg_transaction_amount"]
+    df["loyalty_score"] = df["customer_tenure_days"] * df["cumulative_transaction_amount"] / (df["plan_switch_count"] + 1)
     df["high_churn_risk"] = (df["inactive_months"] > 0.933333333333333).astype(int)  # Flag for customers inactive for >2 months
     df["transaction_trend_score"] = df["rolling_avg_3m"] - df["rolling_avg_6m"]  # Short vs Long term trend
     return df
 
-def selectRelevantFeatures(df):
+
+def select_relevant_features(df):
     """Retain only relevant columns."""
     selected_features = [
         "customer_id",
@@ -25,9 +27,9 @@ def selectRelevantFeatures(df):
         "high_churn_risk",
         "transaction_trend_score",
         "plan_type",
-        "is_downgraded",
-        "is_upgraded",
-        "total_transactions",
+        "is_plan_downgraded",
+        "is_plan_upgraded",
+        "total_transactions_count",
         "premium_ratio",
         "standard_ratio",
         "basic_ratio",
@@ -35,17 +37,16 @@ def selectRelevantFeatures(df):
     ]
     return df[selected_features]
 
-def savePreprocessedData(df, output_path):
+
+def save_preprocessed_data(df, output_path):
     """Save the preprocessed dataset."""
     df.to_csv(output_path, index=False)
     print("Feature extraction complete.")
 
-def main():
-    """Main function to run the feature extraction pipeline."""
-    df = loadData(ENGINEERED_FEATURES)
-    df = featureEngineering(df)
-    df_selected = selectRelevantFeatures(df)
-    savePreprocessedData(df_selected, PREPROCESSED_FEATURES)
 
-if __name__ == "__main__":
-    main()
+def preprocess_features(engineered_features, preprocessed_features):
+    """Main function to run the feature extraction pipeline."""
+    df = load_data(engineered_features)
+    df = feature_engineering(df)
+    df_selected = select_relevant_features(df)
+    save_preprocessed_data(df_selected, preprocessed_features)

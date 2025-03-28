@@ -24,5 +24,5 @@
         "f1-score": 0.940475595188488,
         "support": 240
     },
-    "matthewsCorrcoef": 0.8645959558641901
+    "matthews_corrcoef": 0.8645959558641901
 }
