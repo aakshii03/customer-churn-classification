@@ -6,17 +6,35 @@ import numpy as np
 import joblib
 import xgboost as xgb
 import os
-from config import MODELS, PREPROCESSED_FEATURES, RESULTS, TRAINING_DATASET, ENGINEERED_FEATURES, ENGINEERED_FEATURES, PREPROCESSED_FEATURES
-from data_engineering import data_engineering
-from final_preprocess_features import preprocess_features
+from config import MODELS, PREPROCESSED_DATA, RESULTS, TRAINING_DATASET, ENGINEERED_FEATURE
 from train import train_pipeline
 import lime.lime_tabular
 import matplotlib.pyplot as plt
+from feature_engineering import feature_engineering
+from preprocessing import data_preperocessing
+from evaluate import evaluate_model
+from explain import generate_lime_explanation
 
-data_engineering(TRAINING_DATASET, ENGINEERED_FEATURES)
-preprocess_features(ENGINEERED_FEATURES, PREPROCESSED_FEATURES)
-train_pipeline(MODELS, PREPROCESSED_FEATURES, RESULTS)
+"""
+This script executes the full machine learning pipeline for customer churn prediction.
+It involves data preprocessing, feature engineering, model training, evaluation, and model explanation using LIME.
 
+Steps:
+1. Data Preprocessing: Cleans and prepares the training dataset.
+2. Feature Engineering: Creates relevant features to improve model performance.
+3. Model Training: Trains an XGBoost model on the processed dataset.
+4. Model Evaluation: Assesses model performance using test data.
+5. Model Explanation: Uses LIME to explain the model's predictions.
+6. Making Predictions: Loads the trained model and scaler to predict customer churn.
+7. Generating LIME Explanation: Visualizes feature importance for a sample prediction.
+"""
+
+
+data_preperocessing(TRAINING_DATASET, PREPROCESSED_DATA)
+feature_engineering(PREPROCESSED_DATA, ENGINEERED_FEATURE)
+model, X_test_scaled, y_test, results_dir, X_train_scaled, feature_names = train_pipeline(MODELS, ENGINEERED_FEATURE, RESULTS)
+evaluate_model(model, X_test_scaled, y_test, results_dir)
+generate_lime_explanation(model, X_train_scaled, X_test_scaled, feature_names, results_dir)
 
 
 # Load the trained scaler

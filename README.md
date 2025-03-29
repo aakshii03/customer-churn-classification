@@ -1,4 +1,4 @@
-# atiDot_churnPrediction
+# customer-churn-classification
 
 ## Predicting Customer Churn Using Time-Series Data
 
@@ -13,12 +13,14 @@
 
 ## Steps to Use the Repository
 
-1. **Update the environment file**: Rename `ENV.txt` to `.env`.
+1. **Update the environment file**: Rename `.env.local` to `.env`.
 2. **Modify paths**: Update file and folder paths in the `.env` file according to your system.
 3. **Run the pipeline**: Execute `main.py` to initiate the full pipeline, which includes:
-   - `data_engineering.py`: Generates initial features.
-   - `final_preprocess_features.py`: Creates more refined features and selects important ones.
+   - `preprocessing.py`: Cleans data and Generates initial features.
+   - `feature_engineering.py`: Creates more refined features and selects important ones.
    - `train.py`: Trains models and analyzes results.
+   - `evaluate.py`: evaluates the model performance and save the values and images.
+   - `explain.py`: Gives the LIME explaination of model
 
 ---
 
@@ -30,7 +32,7 @@ Build a robust **classification model** to predict **customer churn** between **
 
 ## Approach Taken
 
-### 1. Data Engineering
+### 1. Data Preprocessing
 
 - **Preprocessing**: Loads and sorts transaction records chronologically.
 - **Handling Missing Values**:
@@ -45,7 +47,7 @@ Build a robust **classification model** to predict **customer churn** between **
 
 ---
 
-### 2. Feature Processing & Selection
+### 2. Feature Engineering & Selection
 
 - Computes additional features for **customer transaction behavior analysis**.
 - Retains only the most relevant columns for **better model performance**.

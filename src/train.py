@@ -7,9 +7,34 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.impute import SimpleImputer
 from xgboost import XGBClassifier
-from evaluate import evaluate_model
 
-from explain import generate_lime_explanation
+"""
+Machine Learning Pipeline for Churn Prediction
+This script implements a complete machine learning pipeline to train an XGBoost model for predicting customer churn.
+
+Key functionalities:
+1. Data Loading:
+   - Loads the preprocessed dataset from a CSV file.
+2. Data Preprocessing:
+   - Drops irrelevant columns (e.g., customer ID, dates, first/last transactions, first/last plans).
+   - Encodes categorical features using `LabelEncoder`.
+   - Handles missing values by imputing with the mean.
+3. Data Splitting and Scaling:
+   - Splits data into training and test sets (80/20 split).
+   - Standardizes numerical features using `StandardScaler`.
+   - Saves the scaler for future use.
+4. Model Training:
+   - Trains an `XGBClassifier` on the processed data.
+   - Uses `logloss` as the evaluation metric.
+5. Model Saving:
+   - Saves the trained XGBoost model in JSON format.
+   - Saves label encoders for categorical features.
+6. Execution Pipeline:
+   - The train_pipeline function integrates all the steps and saves the required components for future inference.
+
+Usage:
+Call `train_pipeline(models_dir, preprocessed_features, results_dir)` to execute the full pipeline.
+"""
 
 def load_data(file_path):
     """Load the preprocessed dataset."""
@@ -70,17 +95,10 @@ def train_pipeline(models_dir, preprocessed_features, results_dir):
     df, label_encoders = preprocess_data(df)
     X_train_scaled, X_test_scaled, y_train, y_test, feature_names = split_and_scale_data(df, models_dir)
 
-    print("Training XGBoost model...")
     model = train_xgboost(X_train_scaled, y_train)
-
-    print("Evaluating XGBoost model...")
-    evaluate_model(model, X_test_scaled, y_test, results_dir)
 
     print("Saving XGBoost model and label encoders...")
     save_xgboost_model(model, models_dir)
     save_label_encoders(label_encoders, models_dir)
 
-    print("Generating LIME explanation...")
-    generate_lime_explanation(model, X_train_scaled, X_test_scaled, feature_names, results_dir)
-
-    print("All tasks completed successfully!")
+    return model, X_test_scaled, y_test, results_dir, X_train_scaled, feature_names

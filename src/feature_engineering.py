@@ -1,12 +1,34 @@
 import pandas as pd
 
+"""
+Feature Engineering and Feature Selection for Churn Prediction
+
+This script further processes an engineered dataset by creating additional derived features and selecting relevant columns for model training.
+
+Key functionalities:
+1. Data Loading:
+   - Loads the engineered dataset from a CSV file.
+2. Feature Engineering:
+   - Computes `transaction_gap`: Ratio of days since last transaction to customer tenure.
+   - Computes `spending_variability`: Standard deviation of transactions divided by the mean transaction amount.
+   - Computes `loyalty_score`: A heuristic score based on customer tenure, cumulative transactions, and plan switches.
+   - Flags `high_churn_risk`: Identifies customers inactive for more than 2 months.
+   - Computes `transaction_trend_score`: Difference between 3-month and 6-month rolling transaction averages to identify trends.
+3. Feature Selection:
+   - Retains only relevant features for churn modeling.
+4. Data Saving:
+   - Saves the processed dataset to a CSV file.
+Usage:
+Call `feature_engineering(engineered_features, preprocessed_features)` to process a dataset and save the output.
+"""
+
 
 def load_data(file_path):
     """Load the engineered dataset."""
     return pd.read_csv(file_path)
 
 
-def feature_engineering(df):
+def engineer_features(df):
     """Perform feature engineering on the dataset."""
     df["transaction_gap"] = df["days_since_last_txn"] / df["customer_tenure_days"]
     df["spending_variability"] = df["std_transaction_amount"] / df["avg_transaction_amount"]
@@ -44,9 +66,9 @@ def save_preprocessed_data(df, output_path):
     print("Feature extraction complete.")
 
 
-def preprocess_features(engineered_features, preprocessed_features):
+def feature_engineering(preprocessed_features, engineered_features):
     """Main function to run the feature extraction pipeline."""
-    df = load_data(engineered_features)
-    df = feature_engineering(df)
+    df = load_data(preprocessed_features)
+    df = engineer_features(df)
     df_selected = select_relevant_features(df)
-    save_preprocessed_data(df_selected, preprocessed_features)
+    save_preprocessed_data(df_selected, engineered_features)

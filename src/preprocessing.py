@@ -1,6 +1,32 @@
 import pandas as pd
 import numpy as np
 
+"""
+Feature Engineering for Customer Transaction Data
+This script performs feature engineering on customer transaction data to support churn prediction and behavioral analysis.
+
+Key functionalities:
+1. Data Loading & Sorting:
+   - Loads data from a CSV file.
+   - Sorts data by customer ID and date for sequential processing.
+2. Missing Value Handling:
+   - Fills missing transaction amounts using the mean transaction value per customer.
+   - Replaces missing plan types with the most frequent plan per customer.
+3. Transaction Statistics:
+   - Computes tenure, transaction count, mean, standard deviation, and min/max transaction amounts.
+4. Time-Based Features:
+   - Computes lagged transaction amounts, transaction trends, inactive months, and days since the last transaction.
+5. Rolling Features:
+   - Computes rolling averages for transaction amounts over 3-month and 6-month periods.
+6. Plan-Based Features:
+   - Identifies first and last plan types, counts plan switches, and calculates upgrade/downgrade indicators.
+7. Transaction Level Assignment:
+   - Categorizes cumulative transaction amounts into predefined levels.
+8. Data Saving:
+   - Saves the engineered dataset to a CSV file.
+Usage:
+Call `data_preperocessing(training_dataset, engineered_features)` to process a dataset and save the output.
+"""
 
 def load_and_sort_data(filepath: str) -> pd.DataFrame:
     """Load dataset and sort by customer_id and date."""
@@ -87,7 +113,7 @@ def save_dataset(df: pd.DataFrame, filepath: str):
     print(f"Feature engineering complete. Saved to {filepath}")
 
 
-def data_engineering(training_dataset: str, engineered_features: str):
+def data_preperocessing(training_dataset: str, engineered_features: str):
     df = load_and_sort_data(training_dataset)
     df = fill_missing_values(df)
     df = transactions_statistics(df)
