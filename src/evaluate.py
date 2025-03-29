@@ -4,6 +4,20 @@ import matplotlib.pyplot as plt
 import json
 import os
 
+"""
+This script evaluates a trained XGBoost model by computing performance metrics 
+and visualizing results using a confusion matrix.
+
+Evaluation Metrics:
+- Accuracy: Measures the percentage of correct predictions.
+- Matthews Correlation Coefficient (MCC): Evaluates correlation between actual and predicted values (useful for imbalanced datasets).
+- Classification Report: Provides precision, recall, F1-score, and support for each class.
+- Confusion Matrix: Visual representation of correct vs. incorrect predictions.
+
+The evaluation results are saved as:
+1. JSON file containing all computed metrics.
+2. PNG image of the confusion matrix.
+"""
 
 def evaluate_model(model, X_test, y_test, results_dir):
     """Evaluate the trained XGBoost model."""

@@ -3,6 +3,18 @@ import lime
 import lime.lime_tabular
 import os
 
+"""
+    Generate LIME (Local Interpretable Model-Agnostic Explanations) explanations 
+    for the predictions made by the XGBoost model.
+    
+    Args:
+        model: Trained XGBoost model.
+        X_train: Training dataset (used to fit the explainer).
+        X_test: Test dataset (used to select an instance for explanation).
+        feature_names: List of feature names for interpretability.
+        results_dir: Directory to save the LIME explanation plot.
+    """
+
 def generate_lime_explanation(model, X_train, X_test, feature_names, results_dir):
     """Generate LIME explanations for the XGBoost model with improved layout."""
     explainer = lime.lime_tabular.LimeTabularExplainer(
